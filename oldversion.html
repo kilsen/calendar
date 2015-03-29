@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>JavaScript Event Calendar | The Old Version</title>
+<meta name="description" content="The JavaScript Event Calendar is a free script for webmasters looking for a way to easily publish an on-line calendar of events for their group or organization." />
+<meta name="keywords" content="JavaScript|calendar|events|event calendar" />
+<link rel="stylesheet" href="css/layout.css" type="text/css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="pageTop">
+      <h1>The “Old” JavaScript Event Calendar</h1>       
+      <ul class="navbar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="history.html">About/History</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li class="current-page">Old&nbsp;Version&nbsp;(1.0)</li>
+      </ul>       
+    </div>
+    <div class="pageMiddle">
+      <div class="pageContent">
+        <p>If you're looking for the old calendar support site, including the examples, instructions,
+        and the download files, you can find all of that <a href="http://oldcalendar.ilsen.net">here</a>.
+        However, I STRONGLY urge you to use the new version. The code is tighter, it offers more
+        control over the  “look and feel,” and selecting a different month does not involve a new
+        server request.</p>
+        <p>Also, any questions that I receive about the old version will be met with the same answer:
+        “You should upgrade to the new version.”</p>
+        <p>Having said that . . . some people have created processes which produce the DefineEvent(&nbsp;)
+        function calls which were used in the old version. And although the new version provides a
+        .defineEvent(&nbsp;) method that is “compatible” with the old function, changing those existing
+        processes might not be practical (or possible). So, here's a quick way to solve that problem, and
+        effectively create a direct “bridge” from the old DefineEvent(&nbsp;) function to the new
+        .defineEvent(&nbsp;) method.
+        </p>
+        <p>All you need to do is define a global JavaScript function in your page like the one below:</p>
+        <ol class="code">
+          <li><code>&lt;script type="text/javascript"&gt;</code></li>
+          <li><code>&nbsp;&nbsp;function DefineEvent(eDate, eDesc, eLink, img, imgWidth, imgHeight) {</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;myCalendar.defineEvent(eDate, eDesc, eLink, img, imgWidth, imgHeight);</code></li>
+          <li><code>&nbsp;&nbsp;};</code></li>
+          <li><code>&lt;/script&gt;</code></li>      
+        </ol>
+        <p>Be sure to use the name of your JEC object in place of “myCalendar” in line 3, and be sure to place this
+        function definition BEFORE any calls to DefineEvent(&nbsp;) that you place on your page.</p>
+      </div>
+    </div>
+    <div class="pageBottom"></div>
+  </div>
+</body>
+</html>

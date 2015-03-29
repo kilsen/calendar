@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>JavaScript Event Calendar | Examples</title>
+<meta name="description" content="The JavaScript Event Calendar is a free script for webmasters looking for a way to easily publish an on-line calendar of events for their group or organization." />
+<meta name="keywords" content="JavaScript|calendar|events|event calendar" />
+<!--[if lte IE 6]>
+<script type="text/javascript" src="js/supersleight.js"></script>
+<![endif]-->
+<script type="text/javascript" src="js/calendar-2.5.js"></script>
+<script type="text/javascript">
+var plainJEC = new JEC('plainCalendar');
+plainJEC.showCalendar();
+
+var greyCal = new JEC('greyCalendar', { tableClass: 'greyCalendar' });
+greyCal.defineEvents([
+ { 
+   eventDate: 20100401, 
+   eventDescription: 'April Fools Day' 
+ },                      
+ { 
+   eventDate: 20100407, 
+   eventDescription: 'JEC 2.0 Released', 
+   eventLink: 'http://calendar.ilsen.net'
+ },
+ { 
+   eventDate: 20090101, 
+   eventDescription: 'MonkeysTapping Launched!', 
+   eventLink: 'http://monkeystapping.com',   
+   eventLinkTitle: 'A poetry, collaborative writing, self-expression, writing game experiment',
+   image: 'img/monkey.gif'
+ },
+ { eventDate: 20100705, eventDescription: 'Kevin\'s Birthday' },
+ { eventDate: 20090705, eventDescription: 'Kevin\'s BIG Birthday!' }
+]);
+greyCal.linkDates([
+ { linkedDate: 20100407, dateLink: 'tutorial.html' },
+ { linkedDate: 20090101, dateLink: 'index.html' }
+]);
+greyCal.showCalendar();
+
+var styledCal = new JEC('styledCalendar', {
+  tableClass: 'styledCalendar',
+  firstMonth: 201003,
+  lastMonth: 201010,
+  specialDay: 1,
+  linkNewWindow: false,
+  weekdays: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
+});
+styledCal.defineEvents([
+  { 
+    eventDate: 20100407, 
+    eventDescription: 'JEC 2.0 Released', 
+    eventLink: 'http://calendar.ilsen.net'
+  },
+  { eventDate: 20100401, eventDescription: 'April Fools Day' },
+  { eventDate: 20100329, eventDescription: 'First Passover Seder' },
+  { eventDate: 20100330, eventDescription: 'Second Passover Seder' },
+  { eventDate: 20100705, eventDescription: 'Kevin\'s Birthday' },
+  { eventDate: 20100906, eventDescription: 'Labor Day' },
+  { eventDate: 20100906, eventDescription: 'No school' },
+  { 
+    eventDate: 20100906,
+    eventDescription: 'IWFS Dinner',
+    eventLink: 'http://www.iwfsphilly.org' 
+  },
+  { eventDate: 20100906, eventDescription: 'Close up the beach house' },
+  { 
+    eventDate: 20100906,
+    eventDescription: 'Field trip to Ridley Creek State Park',
+    eventLink: 'http://www.dcnr.state.pa.us/stateparks/parks/ridleycreek.aspx' 
+  },
+  { eventDate: 20130716, eventTime: 1900, eventDescription: 'Wine dinner' },
+  { eventDate: 20130716, eventDescription: 'Finish calendar modifications' },
+  { eventDate: 20130716, eventTime: 715, eventDescription: 'Wake up and work on calendar' }   
+]);
+styledCal.styleDates([
+  {
+	styledDate: 20110528,
+	dateClass: 'memorialDayWeekend'
+  },                    
+  {
+	styledDate: 20110529,
+	dateClass: 'memorialDayWeekend'
+  },                    
+  {
+	styledDate: 20110530,
+	dateClass: 'memorialDayWeekend'
+  }                    
+]);
+styledCal.showCalendar(201007);
+</script>
+<link rel="stylesheet" href="css/layout.css" type="text/css" />
+<link rel="stylesheet" href="css/jec-grey.css" type="text/css" />
+<link rel="stylesheet" href="css/jec-styled.css" type="text/css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="pageTop">
+      <h1>JavaScript Event Calendar Examples</h1>       
+      <ul class="navbar">    
+        <li><a href="index.html">Home</a></li>
+        <li><a href="history.html">About/History</a></li>
+        <li class="current-page">Examples</li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="oldversion.html">Old&nbsp;Version&nbsp;(1.0)</a></li>
+      </ul>     
+    </div>
+    <div class="pageMiddle">
+      <div class="pageContent">
+        <div class="lefthalf">
+          <p>At the right is a calendar with no events defined and no options. By default,
+          it will show the current month, and will permit all months in the current year
+          to be viewed. Note that no specific styling is applied. This is NOT recommended;
+          you should at least supply a basic set of styles, as in the other examples on
+          this page (also, see the <a href="tutorial.html">Tutorial</a> page). Try selecting
+          a different month (using the links or the drop-down list) and notice how the
+          calendar changes “in place” without the need to re-load the page from the web server.        
+          </p>
+        </div>
+        <div class="righthalf">
+          <div id='plainCalendar'></div>
+        </div>
+        <div class="clear spacer"></div>
+        <p>The calendar below is styled with shades of grey, and all days have a uniform 
+        width (but variable height). The styling of “today” is special, and days with events also have special
+        styling. A few events are defined (on 1/1/09, 7/5/09, 4/1/10, 4/7/2010, and 7/5/2010); 
+        this results in the “range” of the calendar
+        automatically expanding so that it encompasses all dates with events. (The 
+        <a href="tutorial.html">Tutorial</a> page explains how to define events, how
+        to set calendar options, and how to specify the styles. Also, the styles used
+        on this page are available on the <a href="downloads.html">Downloads</a> page.)</p>
+        <div id='greyCalendar'></div>
+        <div class="clear spacer"></div>
+        <p>Finally, the calendar below uses altogether different styling, and has different
+        events defined. In addition, it illustrates some optional settings, such as:</p>
+        <ul class="bullets">
+          <li>a “special” day of the week (in this case, Sunday);</li>
+          <li>custom weekday names - a handy feature when displaying calendars in
+          languages other than English (month names can also be customized);</li>
+          <li>the range of the calendar is constrained from March 2010 to October 
+          2010 - regardless of when the events are (this is a useful feature for
+          building calendars that correspond to academic, fiscal, or other periods
+          such as specific sporting seasons);</li>
+          <li>clicking an event link will NOT open a new window (the normal default behavior),
+          but will go to the page in the current browser;</li>
+          <li>rather than opening to the current month (the default behavior), the calendar
+          explicitly opens to a SPECIFIC month (in this case, July 2010 - because my
+          birthday is July 5!).</li>
+        </ul> 
+        <p>The styling of this calendar uses multiple colors; you’ll probably want to do something
+        similar when you incorporate calendars into your own web site, using colors that are
+        compatible with your existing site. Also, in addition to a uniform width (as in the previous example),
+        all dates have a fixed height. Take a look at September 2010 (specifically,
+        September 6) to see what happens when a
+        date has a lot of events, but the height is fixed. This is all controlled by the
+        applied styles. The events defined for July 16, 2013 illustrate the ability to assign
+        times to events, and the sorting of the events for display.</p>
+        <p>Finally, this calendar also illustrates the use of the ".styleDates(&nbsp;)" function; take
+        a look at Memorial Day Weekend 2011 (5/28-5/30) and note that a special background color is used.</p>
+        <div id='styledCalendar'></div>
+        <div class="spacer"></div>
+      </div>
+    </div>
+    <div class="pageBottom"></div>
+  </div>
+</body>
+</html>

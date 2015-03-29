@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>JavaScript Event Calendar | Tutorial</title>
+<meta name="description" content="The JavaScript Event Calendar is a free script for webmasters looking for a way to easily publish an on-line calendar of events for their group or organization." />
+<meta name="keywords" content="JavaScript|calendar|events|event calendar" />
+<link rel="stylesheet" href="css/layout.css" type="text/css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="pageTop">
+      <h1>How to Use the JavaScript Event Calendar</h1>        
+      <ul class="navbar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="history.html">About/History</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li class="current-page">Tutorial</li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="oldversion.html">Old&nbsp;Version&nbsp;(1.0)</a></li>
+      </ul>       
+    </div>
+    <div class="pageMiddle">    
+      <div class="pageContent">
+        <p>The JavaScript Event Calendar is designed to permit maximum control over the look and feel
+        of the displayed calendar, while still making it easy to specify events that should be displayed.
+        The look of the calendar is almost entirely controlled by a Cascading Style Sheet (either a linked
+        CSS file, or styles embedded in the page). Basically, you’ll follow these steps:</p>
+        <ol>
+          <li>Download the latest .JS file to your own web site, and reference it on the page
+          where you want to display the calendar.</li>
+          <li>(optional but recommended) Define CSS settings to customize the look of the calendar.</li>
+          <li>Put a &lt;div&gt; on your page where you want the calendar to appear, with a unique id.</li>
+          <li>Create a new JEC object, indicating the id of the div (and any optional settings).</li>
+          <li>Define one or more events (the .defineEvents() function can be invoked multiple times, 
+          and each invocation can define multiple events).</li>
+          <li>Show the calendar (by calling the .showCalendar() function).</li>
+        </ol>
+        <p>Each of these steps is described in detail below.</p>
+        <h2>The .JS File</h2>
+        <p>The code for the calendar is contained in a single JavaScript file, which you can
+        get on the <a href="downloads.html">Downloads</a> page. Please do NOT link directly
+        to the file on this web server; use a copy on your own server. You’ll add a line to the
+        &lt;head&gt; section of your web page, similar to the following:</p>
+        <ul class="code">
+          <li><code>&lt;html&gt;</code></li>
+          <li><code>&lt;head&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&lt;script type="text/javascript" src="{path-to-local-js-files}/calendar-2.4.js"&gt;&lt;/script&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&lt;/head&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+        </ul>
+        <h2>CSS Styling</h2>
+        <p>The calendar may be styled in a variety of ways; to do this, it is important
+        to understand how the calendar is marked up as an HTML table.</p>
+        <p>The &lt;table&gt; will have a class of “JEC” (unless this has been overridden prior
+        to showing the calendar). Thus, “table.JEC” can be used as a selector to
+        style individual table elements.</p>
+        <p>The &lt;table&gt; will have a &lt;thead&gt; that includes one row, with a single 
+        &lt;th&gt; spanning 7 columns and containing the month and year. Think of this as the
+        “heading” of the entire calendar. You can style it like this, for example:</p>
+        <ol class="code">
+          <li><code>table.JEC thead th {</code></li>        
+          <li><code>&nbsp;&nbsp;background-color: #696969;</code></li>
+          <li><code>&nbsp;&nbsp;color: white;</code></li>
+          <li><code>&nbsp;&nbsp;font-size: 16px;</code></li>
+          <li><code>&nbsp;&nbsp;font-weight: bold;</code></li>
+          <li><code>&nbsp;&nbsp;margin: 5px;</code></li>
+          <li><code>}</code></li>
+        </ol>
+        <p>The &lt;table&gt; will have a &lt;tfoot&gt; that includes one row, containing three
+        &lt;th&gt; elements. The first, spanning 2 columns, will contain a link to the
+        previous month. The second, spanning 3 columns, will contain a drop-down
+        select box for jumping directly to any month. The third, spanning 2 columns,
+        will contain a link to the next month.</p>
+        <p>The &lt;table&gt; will have a &lt;tbody&gt; that includes all of the actual dates. The first
+        row in the &lt;tbody&gt; will contain 7 &lt;th&gt; elements, each containing the (abbreviated) name
+        of a day of the week (Sun - Sat). Subsequent rows will each contain
+        7 &lt;td&gt; elements. Each &lt;td&gt; in the &lt;tbody&gt; will display a date. Some will be 
+        empty because they represent blank squares in the calendar grid; these will
+        be defined as &lt;td class='dayBlank'&gt;. The others will have a &lt;div class='date'&gt;
+        element that contains only the day of the month. If there are events for a
+        day, they will be displayed in a &lt;div class='events'&gt; that immediately follows
+        the date. The text of each event description will be enclosed in a &lt;span&gt; element
+        (unless there is a URL associated with the event, in which case the text will be
+        enclosed in an &lt;a&gt; element). When there are multiple events on the same day,
+        a &lt;br/&gt; element will appear BETWEEN the events (but NOT after the last event).
+        If an event has an image, it will precede the event's &lt;span&gt; or &lt;a&gt; element.
+        </p>
+        <p>Table cells (&lt;td&gt;'s) may have one or more of the following classes:</p>
+        <dl>
+          <dt>dayBlank</dt>
+          <dd>for a cell that is a blank square in the calendar</dd>
+          <dt>dayToday</dt>
+          <dd>for the cell corresponding to the current date</dd>
+          <dt>daySpecial</dt>
+          <dd>for special days of the week (Sunday, for example)</dd>
+          <dt>dayHasEvent</dt>
+          <dd>if there is at least one event on the day</dd>
+        </dl>
+        <p>Using these classes, it is possible to render the date cell(s) differently
+        by adjusting the cell background, the color of the date (by styling div.date), etc.
+        For example:</p>
+        <ol class="code">
+          <li><code>table.JEC td.dayToday {</code></li>
+          <li><code>&nbsp;&nbsp;background-color: #eee;</code></li>
+          <li><code>&nbsp;&nbsp;border: 3px solid black;</code></li>
+          <li><code>}</code></li>      
+        </ol>
+        <p>At your option, there are two ways you can specify the styling of the elements in the
+        calendar table. Either you can include an embedded style sheet within your HTML page, or
+        you can link to an external style sheet. The <a href="examples.html">Examples</a> page makes
+        use of two different external linked style sheets, as follows:</p>
+        <ul class="code">
+          <li><code>&lt;html&gt;</code></li>
+          <li><code>&lt;head&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&lt;link rel="stylesheet" href="css/jec-grey.css" type="text/css" /&gt;</code></li>
+          <li><code>&lt;link rel="stylesheet" href="css/jec-styled.css" type="text/css" /&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&lt;/head&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>             
+        </ul>
+        <p>TWO different style sheets are linked, because the <a href="examples.html">Examples</a>
+        page includes multiple calendars, each styled differently. (Both of these style sheets are
+        available on the <a href="downloads.html">Downloads</a> page.)</p>
+        <p>As previously noted, the calendar’s &lt;table&gt; is created with a class=“JEC” by
+        default, but this class can be overridden (as described later). If you are planning to have
+        multiple calendars on the page, styled differently, you will NEED to override the class name.</p>
+        <h2>Place Your Calendar</h2>
+        <p>Decide where, in the overall layout of your page, you’d like your calendar
+        to appear. Create a &lt;div&gt; element with a unique id attribute, and no
+        content. For example:</p> 
+        <ul class="code">
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&lt;div id='myCalendarContainer'&gt;&lt;/div&gt;</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+          <li><code>&nbsp;&nbsp;.</code></li>
+        </ul>     
+        <h2>Create the JEC Object</h2>
+        <p>For the remaining steps, you’ll need to add a small bit of JavaScript code, 
+        where you’ll create the object, set options, define events, and show the calendar.
+        The first step is to create an instance of the JEC "class” as follows:</p>
+        <ol class="code">
+          <li><code>&lt;script type="text/javascript"&gt;</code></li>
+          <li><code>&nbsp;&nbsp;var myCalendar = new JEC('myCalendarContainer');</code></li>
+          <li><code>&lt;/script&gt;</code></li>      
+        </ol>
+        <p>In the code above, the string that you pass to the JEC(&nbsp;) constructor
+        must match the id attribute of the &lt;div&gt; where you want the calendar
+        to appear.</p>
+        <p>The line above will create the JEC object, but nothing will be displayed.
+        To display the calendar, invoke the .showCalendar(&nbsp;) function on the object
+        that you created:</p>
+        <ol class="code">
+          <li><code>&lt;script type="text/javascript"&gt;</code></li>
+          <li><code>&nbsp;&nbsp;var myCalendar = new JEC('myCalendarContainer');</code></li>
+          <li><code>&nbsp;&nbsp;myCalendar.showCalendar();</code></li>
+          <li><code>&lt;/script&gt;</code></li>      
+        </ol>
+        <p>Now, the calendar will appear at the desired place on your page. It will display
+        the current month, and the links and drop-down list will permit the user to
+        select any month within the current year. The definition of events (see below) or
+        the explicit inclusion of options will change that default behavior.</p>
+        <p>The JEC(&nbsp;) constructor accepts a second parameter (in addition to the
+        id of the &lt;div&gt; that will contain the calendar). The optional second parameter
+        is an object that can contain a set of name/value pairs, specifying options that
+        will alter the generated calendar. The name/value pairs are specified in JavaScript
+        Object Notation (i.e., “JSON” format). The supported options include:</p>
+        <dl>
+          <dt>tableClass</dt>
+          <dd>the name of the class that will be applied to the calendar &lt;table&gt;
+          element (if not specified, the class name will be “JEC”)</dd>
+          <dt>firstDayOfWeek</dt>
+          <dd>the day of the week that should be displayed in the left-most column
+          of the calendar; 1=Sunday, 2=Monday, . . . 7=Saturday (default is Sunday)</dd>
+          <dt>specialDay</dt>
+          <dd>the day of the week that should receive a special class (“daySpecial”)
+          so that it can be styled differently than the other days; 1=Sunday,
+          2=Monday, . . . 7=Saturday (if not specified, then no days will receive
+          the special class)</dd>
+          <dt>specialDays</dt>
+          <dd>array of special day numbers, if you need multiple days to receive the
+          special class; for example [ 1, 7 ] for Sunday and Saturday (if this option
+          is specified, it will supersede the single specialDay option)</dd>
+          <dt>linkNewWindow</dt>
+          <dd>if true, links (when present for events) will open in a new window; if
+          false, links will open in the current browser window (default=true)</dd>
+          <dt>dateLinkNewWindow</dt>
+          <dd>if true, date links (when present) will open in a new window; if
+          false, date links will open in the current browser window (default=false)</dd>
+          <dt>months</dt>
+          <dd>array of month names for the months January through February</dd>
+          <dt>weekdays</dt>
+          <dd>array of weekday names, from Sunday (“Sun”) through Saturday (“Sat”)</dd>
+          <dt>firstMonth</dt>
+          <dd>the first month to make available for display, specified in YYYYMM format
+          (the presence of events will take precedence; you cannot make the calendar
+          range “smaller” than the defined events determine)</dd>
+          <dt>lastMonth</dt>
+          <dd>the last month to make available for display, specified in YYYYMM format
+          (the presence of events will take precedence; you cannot make the calendar
+          range “smaller” than the defined events determine)</dd>
+        </dl>
+        <p>Below is an example of how a calendar can be created with various options:</p>
+        <ol class="code">
+          <li><code>var myCal = new JEC('myCalendarContainer', {</code></li> 
+          <li><code>&nbsp;&nbsp;tableClass: 'styledCalendar',</code></li>
+          <li><code>&nbsp;&nbsp;firstMonth: 201003,</code></li>
+          <li><code>&nbsp;&nbsp;lastMonth: 201010,</code></li>
+          <li><code>&nbsp;&nbsp;firstDayOfWeek: 2,</code></li>
+          <li><code>&nbsp;&nbsp;specialDays: [ 1, 7 ],</code></li>
+          <li><code>&nbsp;&nbsp;linkNewWindow: false,</code></li>
+          <li><code>&nbsp;&nbsp;weekdays: [ </code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Sunday",</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Monday",</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Tuesday",</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Wednesday",</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Thursday",</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Friday",</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;"Saturday"</code></li>
+          <li><code>&nbsp;&nbsp;]</code></li>
+          <li><code>});</code></li>      
+        </ol>
+        <h2>Define Events</h2>
+        <p>This is, after all, a JavaScript EVENT Calendar, and so the definition of the events
+        is perhaps the most important aspect of the tool. The JEC object includes a .defineEvents(&nbsp;)
+        function, which allows you to specify a list of one or more events, each with its own
+        unique properties. As in the case of the optional parameter to the JEC(&nbsp;) constructor,
+        the events are specified using JSON. The .defineEvents(&nbsp;) function accepts an array,
+        and each element in the array is an object that can include the following name/value pairs:</p>
+        <dl>
+          <dt>eventDate</dt>
+          <dd>the date of the event, in the format YYYYMMDD (this is a REQUIRED value)
+          </dd>
+          <dt>eventTime</dt>
+          <dd>if specified, this optional value is the time of the event (hour and minute), expressed as a number in "military" (24-hour) format; for example,
+          315 would mean 3:15 AM, 1930 would mean 7:30 PM, 0 would mean midnight (at the very beginning
+          of the day), and 2359 would mean 1 minute before midnight (at the end of the day); when event
+          times are defined, the events will be sorted for display within the date according to the time
+          </dd>
+          <dt>eventDescription</dt>
+          <dd>the description of the event, which will appear in the calendar on the indicated
+          date (this is a REQUIRED value)</dd>
+          <dt>eventLink</dt>
+          <dd>if specified, this optional value is the URL of a page to which the event will be linked
+          </dd>
+          <dt>eventLinkTitle</dt>
+          <dd>if specified, this optional value is text that pops up when the user “hovers” the mouse over the link
+          </dd>
+          <dt>eventLinkClass</dt>
+          <dd>if specified, this optional value is the name of the class that will be applied to the link's 
+          &lt;a&gt; element</dd>
+          <dt>image</dt>
+          <dd>if specified, this optional value is the path of an image (relative to the current page on the
+          web server) that will be displayed with the event description on the indicated date
+          </dd>
+          <dt>imageWidth</dt>
+          <dd>if specified (and if an image is specified), this optional value is the width of the
+          image in pixels (specifying a width is generally not necessary)
+          </dd>
+          <dt>imageHeight</dt>
+          <dd>if specified (and if an image is specified), this optional value is the height of the
+          image in lines (specifying a height is generally not necessary)
+          </dd>
+        </dl>
+        <p>Below is an example of a call to the .defineEvents(&nbsp;) function, to
+        define 4 different events:</p>
+        <ol class="code">
+          <li><code>myCal.defineEvents(</code></li>
+          <li><code>&nbsp;&nbsp;[</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDate: 20100407,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDescription: 'JEC 2.0 Released',</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLink: 'http://calendar.ilsen.net',</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLinkTitle: 'A JavaScript Event Calendar'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDate: 20090101,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDescription: 'MonkeysTapping Launched!',</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLink: 'http://monkeystapping.com'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{ eventDate: 20100705, eventDescription: 'Kevin\'s Birthday' },</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{ eventDate: 20090705, eventDescription: 'Kevin\'s BIG Birthday!' }</code></li>
+          <li><code>&nbsp;&nbsp;]</code></li>
+          <li><code>);</code></li>      
+        </ol>
+        <p>To provide some degree of “backward-compatibility” with the original version of the
+        JavaScript Event Calendar, there’s an additional function: .defineEvent(&nbsp;). This
+        function allows you to define a single event, by specifying the event’s properties as
+        individual parameters. You would invoke this event once for each individual event. It
+        can accept between 2 and 7 parameters (unused parameters at the end can be omitted). The
+        full format is shown below, followed by several examples:</p>        
+        <code>
+          .defineEvent(eventDate, eventDescription, eventLink, image, imageWidth, imageHeight, eventLinkTitle);
+        </code>
+        <div class="spacer"></div>
+        <ol class="code">
+          <li><code>myCal.defineEvent(20100407, 'JEC 2.0 Released', 'http://calendar.ilsen.net', , , , 'A JavaScript event Calendar');</code></li>
+          <li><code>myCal.defineEvent(20090101, 'MonkeysTapping Launched', 'http://monkeystapping.com', 'img/monkey.gif');</code></li>
+          <li><code>myCal.defineEvent(20100705, 'Kevin\'s Birthday');</code></li>
+        </ol>
+        <h2>Date Links</h2>
+        <p>In addition to the hyperlinks that can be included with defined events, it is also
+        possible to associate hyperlinks with specific dates. The date number will be “clickable”
+        and can be styled in any way that you like. The JEC object includes a .linkDates(&nbsp;)
+        function, which accepts an array, and each element in the array is an object that includes
+        the following name/value pairs:</p>
+        <dl>
+          <dt>linkedDate</dt>
+          <dd>the date of the event, in the format YYYYMMDD
+          </dd>
+          <dt>dateLink</dt>
+          <dd>the URL of a page to which the date will be linked
+          </dd>
+          <dt>dateLinkTitle</dt>
+          <dd>the optional text that pops up when the user “hovers” the mouse over the date
+          </dd>
+        </dl>
+        <p>Below is an example of a call to the .linkDates(&nbsp;) function, to
+        define 2 different date links:</p>
+        <ol class="code">
+          <li><code>myCal.linkDates(</code></li>
+          <li><code>&nbsp;&nbsp;[</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedDate: 20100407,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dateLink: 'http://calendar.ilsen.net'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedDate: 20090101,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dateLink: 'http://monkeystapping.com'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></li>
+          <li><code>&nbsp;&nbsp;]</code></li>
+          <li><code>);</code></li>      
+        </ol>
+        <h2>Date Classes</h2>
+        <p>There is sometimes a need to apply a particular style to a single date or a group of dates.
+        For example, consider the need to highlight a certain holiday weekend with a background color.
+        The JEC object includes a .styleDates(&nbsp;) function, which accepts an array, and each element 
+        in the array is an object that includes the following name/value pairs:</p>
+        <dl>
+          <dt>styledDate</dt>
+          <dd>the date which should be styled with the class, in the format YYYYMMDD
+          </dd>
+          <dt>dateClass</dt>
+          <dd>the class to apply to the date
+          </dd>
+        </dl>
+        <p>Then, you would use your stylesheet to define whatever specific styles should be applied for
+        that class. Below is an example of a call to the .styleDates(&nbsp;) function:</p>
+        <ol class="code">
+          <li><code>myCal.styleDates(</code></li>
+          <li><code>&nbsp;&nbsp;[</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styledDate: 20110528,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dateClass: 'memorialDayWeekend'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styledDate: 20110529,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dateClass: 'memorialDayWeekend'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styledDate: 20110530,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dateClass: 'memorialDayWeekend'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></li>
+          <li><code>&nbsp;&nbsp;]</code></li>
+          <li><code>);</code></li>      
+        </ol>
+        <h2>Show the Calendar</h2>
+        <p>As previously noted (above), you can display your calendar by invoking the .showCalendar(&nbsp;)
+        function of your calendar object. This will display the current month and year. You can also
+        specify a particular month and year, in the format YYYYMM, as a parameter. For example, the
+        following series of lines defines a calendar with some options, creates a couple of events,
+        and displays the calendar for July 2010:</p>
+        <ol class="code">
+          <li><code>var myCal = new JEC('myCalendarContainer', {</code></li> 
+          <li><code>&nbsp;&nbsp;tableClass: 'styledCalendar',</code></li>
+          <li><code>&nbsp;&nbsp;firstMonth: 201003,</code></li>
+          <li><code>&nbsp;&nbsp;lastMonth: 201010</code></li>
+          <li><code>});</code></li>      
+          <li><code>myCal.defineEvents(</code></li>
+          <li><code>&nbsp;&nbsp;[</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDate: 20100407,</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventDescription: 'JEC 2.0 Released',</code></li> 
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLink: 'http://calendar.ilsen.net',</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventTitle: 'A JavaScript Event Calendar'</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;},</code></li>
+          <li><code>&nbsp;&nbsp;&nbsp;&nbsp;{ eventDate: 20100705, eventDescription: 'Kevin\'s Birthday' }</code></li>
+          <li><code>&nbsp;&nbsp;]</code></li>
+          <li><code>);</code></li>
+          <li><code>myCal.showCalendar(201007);</code></li>      
+        </ol>
+        <div class="clear spacer"></div>
+      </div>
+    </div>
+    <div class="pageBottom"></div>
+  </div>
+</body>
+</html>
